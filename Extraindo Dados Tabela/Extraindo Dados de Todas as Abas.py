@@ -32,7 +32,7 @@ while i < 4:
     navegador.find_element(By.XPATH, '//*[@id="tableSandbox_next"]').click()
 
     # Para dar tempo do computador processar as informações
-    tempoEspera.sleep(5)
+    tempoEspera.sleep(6)
 
 else:
 
