@@ -35,5 +35,3 @@ tempoEspera.sleep(2)
 pegaDropDown = navegador.find_element(By.ID, '72543178')
 itemSelecionado = Select(pegaDropDown)
 itemSelecionado.select_by_index(3)
-
-tempoEspera.sleep(60)
