@@ -1,15 +1,17 @@
 from docx import Document
 from docx.shared import Pt
 from openpyxl import load_workbook
+#Muda cor do texto
+from docx.shared import RGBColor
 
 #Abre Arquivo Excel
-nome_arquivo_alunos = "DadosAlunos.xlsx"
-planilhaDadosAlunos = load_workbook(nome_arquivo_alunos)
+nomeArquivExcel = "DadosAlunos.xlsx"
+planilhaDadosAlunos = load_workbook(nomeArquivExcel)
 
 #Selecionando a aba
-sheet_selecionada = planilhaDadosAlunos["Nomes"]
+sheetSelecionada = planilhaDadosAlunos["Nomes"]
 
-for linha in range(2, len(sheet_selecionada["A"]) + 1):
+for linha in range(2,len(sheetSelecionada["A"]) + 1):
 
     #Abre Arquivo Word
     arquivoWord = Document("Certificado3.docx")
@@ -18,12 +20,12 @@ for linha in range(2, len(sheet_selecionada["A"]) + 1):
     estilo = arquivoWord.styles["Normal"]
 
     #Recuperar nome aluno
-    nomeAluno = sheet_selecionada['A%s' % linha].value
-    dia = sheet_selecionada['B%s' % linha].value
-    mes = sheet_selecionada['C%s' % linha].value
-    ano = sheet_selecionada['D%s' % linha].value
-    nomeCurso = sheet_selecionada['E%s' % linha].value
-    nomeInstrutor = sheet_selecionada['F%s' % linha].value
+    nomeAluno = sheetSelecionada['A%s' % linha].value
+    dia = sheetSelecionada['B%s' % linha].value
+    mes = sheetSelecionada['C%s' % linha].value
+    ano = sheetSelecionada['D%s' % linha].value
+    nomeCurso = sheetSelecionada['E%s' % linha].value
+    nomeInstrutor = sheetSelecionada['F%s' % linha].value
 
     for paragrafo in arquivoWord.paragraphs:
 
@@ -35,13 +37,23 @@ for linha in range(2, len(sheet_selecionada["A"]) + 1):
 
         paragrafoP1 = "Concluiu com sucesso o curso de "
         paragrafoP2 = ", como carga horária de 20 horas, promovido pela escola de Cursos Online em "
-        paragrafoCompleto = f"{paragrafoP1} {nomeCurso}{paragrafoP2} {dia} de {mes} de {ano}."
+        terceiraParteParagrafo = paragrafoP2 + str(dia) + " de " + mes + " de " + str(ano) + "."
 
         if "escola" in paragrafo.text:
-            paragrafo.text = paragrafoCompleto
+            paragrafo.text = paragrafoP1
             fonte = estilo.font
             fonte.name = "Calibri (Corpo)"
             fonte.size = Pt(24)
+            adicionaNovaPalavra = paragrafo.add_run(nomeCurso)
+            #Mudar cor para vermelho
+            adicionaNovaPalavra.font.color.rgb = RGBColor(255, 0, 0)
+            #Sublinhado
+            adicionaNovaPalavra.underline = True
+            #Negrito
+            adicionaNovaPalavra.bold = True
+            adicionaNovaPalavra = paragrafo.add_run(terceiraParteParagrafo)
+            #Mudar para cor preto
+            adicionaNovaPalavra.font.color.rgb = RGBColor(0, 0, 0)
 
         if "Instrutor" in paragrafo.text:
             paragrafo.text = nomeInstrutor + " - Instrutor"
