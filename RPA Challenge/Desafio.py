@@ -20,7 +20,6 @@ arquivo_excel = glob.glob(os.path.join(caminho_pasta_download, "*.xlsx"))
 caminho_arquivo_excel = max(arquivo_excel, key=os.path.getctime)
 
 #Abrir aqrquivo Excel
-#nomeArquivo = "challenge.xlsx"
 planilhaDados = load_workbook(caminho_arquivo_excel)
 sheetSelecionada = planilhaDados["Sheet1"]
 
