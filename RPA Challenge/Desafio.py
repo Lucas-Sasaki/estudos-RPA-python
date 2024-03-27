@@ -2,19 +2,30 @@ from selenium import webdriver as opcoesSelenium
 from selenium.webdriver.common.by import By
 import pyautogui as tempoEspera
 from openpyxl import load_workbook
+import os
+import glob
 
 #Abrir site formulário
 navegador = opcoesSelenium.Chrome()
 navegador.get("https://rpachallenge.com/?lang=EN")
 tempoEspera.sleep(5)
 
+#Download planilha excel
+navegador.find_element(By.XPATH, '/html/body/app-root/div[2]/app-rpa1/div/div[1]/div[6]/a').click()
+tempoEspera.sleep(15)
+
+#Recuperar caminho arquivo
+caminho_pasta_download = os.path.join(os.path.expanduser("~"), "Downloads")
+arquivo_excel = glob.glob(os.path.join(caminho_pasta_download, "*.xlsx"))
+caminho_arquivo_excel = max(arquivo_excel, key=os.path.getctime)
+
 #Abrir aqrquivo Excel
-nomeArquivo = "challenge.xlsx"
-planilhaDados = load_workbook(nomeArquivo)
+#nomeArquivo = "challenge.xlsx"
+planilhaDados = load_workbook(caminho_arquivo_excel)
 sheetSelecionada = planilhaDados["Sheet1"]
 
 #Ler linha a linha do excel
-for linha in range(2,len(sheetSelecionada["A"]) + 1):
+for linha in range(2, len(sheetSelecionada["A"]) + 1):
     firstName = sheetSelecionada['A%s' % linha].value
     lastName = sheetSelecionada['B%s' % linha].value
     companyName = sheetSelecionada['C%s' % linha].value
